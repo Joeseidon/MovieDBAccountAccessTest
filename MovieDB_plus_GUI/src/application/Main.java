@@ -76,8 +76,8 @@ public class Main extends Application {
 	    listView.setItems(data);
 	    StackPane root = new StackPane();
 	    root.getChildren().add(listView);
-	    primaryStage.setScene(new Scene(root, 200, 250));
-	    primaryStage.show();
+	   // primaryStage.setScene(new Scene(root, 200, 250));
+	   // primaryStage.show();
 	    listView.getSelectionModel().selectedItemProperty().addListener(
 	            (ObservableValue<? extends String> ov, String old_val, 
 	                String new_val) -> {
@@ -91,13 +91,16 @@ public class Main extends Application {
 	                    primaryStage.show();*/
 	                	
 	                	//image processing (WORKS!!!)
-	                
+	                	//System.out.println(list.get(new_val).getGenres().get(0).toString());
 	                	Image img = new Image(baseImageURL+list.get(new_val).getPosterPath());
 	                    ImageView imgView = new ImageView(img);
 	                    root.getChildren().add(imgView);
-	                    Scene scene = new Scene(root);
-	                    primaryStage.setScene(scene);
-	                    primaryStage.show();
+	                   // Scene scene = new Scene(root);
+	                    //primaryStage.setScene(scene);
+	                  // primaryStage.show();
+	                  
+	                    
+	                    
 	                	
 	                	
 	                	/*Does not work. Cannot get youtube key from movie class
@@ -120,6 +123,8 @@ public class Main extends Application {
 	               */
 	        });
 	   
+	    primaryStage.setScene(new Scene(root, 200, 250));
+	    primaryStage.show();
 		
 		/*try {
 			BorderPane root = new BorderPane();
