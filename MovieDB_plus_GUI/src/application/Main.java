@@ -91,7 +91,7 @@ public class Main extends Application {
 	                    primaryStage.show();*/
 	                	
 	                	//image processing (WORKS!!!)
-	                /*
+	                
 	                	Image img = new Image(baseImageURL+list.get(new_val).getPosterPath());
 	                    ImageView imgView = new ImageView(img);
 	                    root.getChildren().add(imgView);
@@ -99,13 +99,15 @@ public class Main extends Application {
 	                    primaryStage.setScene(scene);
 	                    primaryStage.show();
 	                	
-	                	*/
-	                	try{
+	                	
+	                	/*Does not work. Cannot get youtube key from movie class
+	                	 try{
 	                		System.out.println(new_val);
 	                		System.out.println(list.get(new_val).getTitle());
 	                		MovieDb movie = list.get(new_val);
 	                		System.out.println(movie.getImdbID());
 	                		List<Video> l = movie.getVideos();
+	                		System.out.println("length: "+movie.getVideos().size());
 	                		for(Video x : l){
 	                			System.out.println(x.getKey());
 	                			System.out.println(x.getSite());
@@ -115,7 +117,7 @@ public class Main extends Application {
 	                		System.out.println(e.getMessage());
 	                	}
 	                	//System.out.println(list.get(new_val).getVideos());
-	               
+	               */
 	        });
 	   
 		
