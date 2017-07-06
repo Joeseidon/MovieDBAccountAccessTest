@@ -4,7 +4,7 @@ import info.movito.themoviedbapi.TmdbAccount.MediaType;
 
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 import info.movito.themoviedbapi.TmdbAccount;
 import info.movito.themoviedbapi.TmdbApi;
@@ -20,104 +20,131 @@ import info.movito.themoviedbapi.model.core.ResponseStatus;
 import info.movito.themoviedbapi.model.core.SessionToken;
 
 public class MovieDBAccount {
-	  private static TmdbApi tmdbApi;
-	  private static SessionToken sessionToken;
-	  private static TmdbAccount tmdbAccount;
-	  private static Account act;
-	  private static AccountID actId;
-	  
-	  public MovieDBAccount(){
-		  tmdbApi = new TmdbApi("3c55a927fbd8c6990313cb6d5de43d62");
-		  sessionToken = getSessionToken();
-		  tmdbAccount = tmdbApi.getAccount();
-		  act = tmdbAccount.getAccount(sessionToken);
-		  actId = new AccountID(act.getId());
-	  }
-	  /*
-		 * @author Joseph
-		 */
-		public MovieResultsPage search() throws IOException {
-			System.out.println(
-					"========================================================");
-			System.out.println(
-					"                   New Search                           ");
-			System.out.println(
-					"========================================================");
+	private TmdbApi tmdbApi;
+	private SessionToken sessionToken;
+	private TmdbAccount tmdbAccount;
+	private Account act;
+	private AccountID actId;
+	private String youTubeBaseURL = "https://www.youtube.com/watch?v=";
+	private String baseImageURL = "https://image.tmdb.org/t/p/w500";
+	
+	private MovieDb selectedMovie;
+	
+	private TmdbMovies movieObj;
+	
+	public MovieDBAccount() {
+		tmdbApi = new TmdbApi("3c55a927fbd8c6990313cb6d5de43d62");
+		sessionToken = getSessionToken();
+		tmdbAccount = tmdbApi.getAccount();
+		act = tmdbAccount.getAccount(sessionToken);
+		actId = new AccountID(act.getId());
+		createMoviesObj(tmdbApi);
+	}
 
-			String retStr = JOptionPane.showInputDialog(null,
-					"Please Enter a Title to Search: ");
+	/*
+	 * @author Joseph
+	 */
+	public MovieResultsPage search(String seachString) throws IOException {
+		/*System.out.println("========================================================");
+		System.out.println("                   New Search                           ");
+		System.out.println("========================================================");
 
-			TmdbSearch tmdbSearch = tmdbApi.getSearch();
+		String retStr = JOptionPane.showInputDialog(null, "Please Enter a Title to Search: ");
+		*/
 
-			return tmdbSearch.searchMovie(retStr, 0, "en", false, 0);
-		}
+		TmdbSearch tmdbSearch = tmdbApi.getSearch();
 
+		return tmdbSearch.searchMovie(seachString, 0, "en", false, 0);
+	}
+
+	/*
+	 * @author Joseph
+	 */
+	public ResponseStatus addMovieToWatchlist(MovieDb mToAdd) {
+		/*String retStr = JOptionPane.showInputDialog(null, "Please Enter a movie ID to remove from watchlist: ");
+		System.out.println("========================================================");
+		System.out.println("                   Adding movie Id: " + retStr + "          ");
+		System.out.println("========================================================");
+		*/
+		return tmdbAccount.addToWatchList(sessionToken, actId, mToAdd.getId(), MediaType.MOVIE);
+	}
+
+	/*
+	 * @author Joseph
+	 */
+	public ResponseStatus removeMovieFromWatchlist(MovieDb mToRemove) {
 		/*
-		 * @author Joseph
+		String retStr = JOptionPane.showInputDialog(null, "Please Enter a movie ID to remove from watchlist: ");
+		System.out.println("========================================================");
+		System.out.println("                   Removing movie Id: " + retStr + "        ");
+		System.out.println("========================================================");
+		 
 		 */
-		public ResponseStatus addMovieToWatchlist() {
-			String retStr = JOptionPane.showInputDialog(null,
-					"Please Enter a movie ID to remove from watchlist: ");
-			System.out.println(
-					"========================================================");
-			System.out.println(
-					"                   Adding movie Id: " + retStr + "          ");
-			System.out.println(
-					"========================================================");
+		return tmdbAccount.removeFromWatchList(sessionToken, actId, mToRemove.getId(), MediaType.MOVIE);
+	}
 
-			return tmdbAccount.addToWatchList(sessionToken, actId,
-					Integer.parseInt(retStr), MediaType.MOVIE);
-		}
-
+	/*
+	 * @author Joseph
+	 */
+	public MovieResultsPage getWatchList() {
 		/*
-		 * @author Joseph
-		 */
-		public ResponseStatus removeMovieFromWatchlist() {
-			String retStr = JOptionPane.showInputDialog(null,
-					"Please Enter a movie ID to remove from watchlist: ");
-			System.out.println(
-					"========================================================");
-			System.out.println(
-					"                   Removing movie Id: " + retStr + "        ");
-			System.out.println(
-					"========================================================");
+		// grab watch list
+		System.out.println("======================================================");
+		System.out.println("                   Printing Watchlist                 ");
+		System.out.println("======================================================");
+		*/
 
-			return tmdbAccount.removeFromWatchList(sessionToken, actId,
-					Integer.parseInt(retStr), MediaType.MOVIE);
-		}
+		return tmdbAccount.getWatchListMovies(sessionToken, actId, 1);
+	}
 
+	public MovieResultsPage getFavorites() {
+		// grab watch list
+		/*System.out.println("======================================================");
+		System.out.println("                   Printing Favorites                 ");
+		System.out.println("======================================================");
+		*/
+
+		return tmdbAccount.getFavoriteMovies(sessionToken, actId);
+	}
+
+	/*
+	 * @author Joseph
+	 */
+	private SessionToken getSessionToken() {
 		/*
-		 * @author Joseph
-		 */
-		public MovieResultsPage retrieveWatchList() {
-			// grab watch list
-			System.out.println(
-					"======================================================");
-			System.out.println(
-					"                   Printing Watchlist                 ");
-			System.out.println(
-					"======================================================");
+		System.out.println("======================================================");
+		System.out.println("                   Creating Session ID                ");
+		System.out.println("======================================================");
+		*/
+		TmdbAuthentication tmdbAuth = tmdbApi.getAuthentication();
+		TokenSession tokenSession = tmdbAuth.getSessionLogin("cutinoj", "Gv$u2017Temp");
+		System.out.println("Session ID: " + tokenSession.getSessionId());
+		SessionToken sessionToken = new SessionToken(tokenSession.getSessionId());
 
-			return tmdbAccount.getWatchListMovies(sessionToken, actId, 1);
-		}
-
-		/*
-		 * @author Joseph
-		 */
-		public SessionToken getSessionToken() {
-			System.out.println(
-					"======================================================");
-			System.out.println(
-					"                   Creating Session ID                ");
-			System.out.println(
-					"======================================================");
-			TmdbAuthentication tmdbAuth = tmdbApi.getAuthentication();
-			TokenSession tokenSession = tmdbAuth.getSessionLogin("cutinoj",
-					"Gv$u2017Temp");
-			System.out.println("Session ID: " + tokenSession.getSessionId());
-			SessionToken sessionToken = new SessionToken(
-					tokenSession.getSessionId());
-
-			return sessionToken;
-		}
+		return sessionToken;
+	}
+	public TmdbApi getTmdbApi(){
+		return tmdbApi;
+	}
+	
+	public MovieDb getSelectedMovie(){
+		return selectedMovie;
+	}
+	
+	public void setSelectedMovie(MovieDb selected){
+		this.selectedMovie = selected;
+	}
+	
+	public String getVidoeURL(){
+		return youTubeBaseURL + movieObj.getVideos(this.getSelectedMovie().getId(), "English").get(0).getKey();
+	}
+	
+	public String getImageURL(){
+		return baseImageURL + this.getSelectedMovie().getPosterPath();
+	}
+	
+	private void createMoviesObj(TmdbApi Apikey){
+		movieObj = new TmdbMovies(Apikey);
+	}
+	
 }
