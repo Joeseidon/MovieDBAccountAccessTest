@@ -1,9 +1,6 @@
 package application;
 
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -11,6 +8,9 @@ import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.MovieDb;
 
+/*
+ * @author Joseph
+ */
 public class TmdbRandomizer {
 	private List<MovieDb> movieWatchList;
 	private List<MovieDb> movieFavorites;
@@ -18,6 +18,9 @@ public class TmdbRandomizer {
 	private MovieDBAccount user;
 	private TmdbMovies movieObj;
 
+	/*
+	 * @author Joseph
+	 */
 	public TmdbRandomizer(MovieDBAccount usr) {
 		this.user = usr;
 		this.update();
@@ -27,11 +30,17 @@ public class TmdbRandomizer {
 		generatePool();
 	}
 
+	/*
+	 * @author Joseph
+	 */
 	public void update() {
 		updateFavorites();
 		updateWatchList();
 	}
 
+	/*
+	 * @author Joseph
+	 */
 	public MovieDb getRandomMovie() throws RandomNotFoundException {
 		if (moviePool == null || moviePool.isEmpty()) {
 			try{
@@ -53,6 +62,9 @@ public class TmdbRandomizer {
 		return moviePool.get(index);
 	}
 
+	/*
+	 * @author Joseph
+	 */
 	public void generatePool()  {
 		try{
 			moviePool = createRandomPool();
@@ -73,6 +85,9 @@ public class TmdbRandomizer {
 		
 	}
 	
+	/*
+	 * @author Joseph
+	 */
 	private ArrayList<MovieDb> createPoolWithoutUserData(){
 		List<MovieDb> tmp;
 		ArrayList<MovieDb> pool = new ArrayList<MovieDb>();
@@ -87,6 +102,9 @@ public class TmdbRandomizer {
 		return pool;
 	}
 
+	/*
+	 * @author Joseph
+	 */
 	private ArrayList<MovieDb> createRandomPool() throws RandomNotFoundException, DataBaseConnectionException {
 		List<MovieDb> tmp;
 		ArrayList<MovieDb> pool = new ArrayList<MovieDb>();
@@ -123,25 +141,23 @@ public class TmdbRandomizer {
 		}
 		return pool;
 	}
-
+	/*
+	 * @author Joseph
+	 */
 	private void updateFavorites() {
-		movieFavorites = toMovieList(user.getFavorites());
+		movieFavorites = user.getFavorites().getResults();
 	}
 
+	/*
+	 * @author Joseph
+	 */
 	private void updateWatchList() {
-		movieWatchList = toMovieList(user.getWatchList());
+		movieWatchList = user.getWatchList().getResults();
 	}
 
-	private List<MovieDb> toMovieList(MovieResultsPage rsp) {
-		ArrayList<MovieDb> tmp = new ArrayList<MovieDb>();
-		Iterator<MovieDb> iterator = rsp.iterator();
-		while (iterator.hasNext()) {
-			MovieDb movie = iterator.next();
-			tmp.add(movie);
-		}
-		return tmp;
-	}
-
+	/*
+	 * @author Joseph
+	 */
 	private void createMoviesObj(TmdbApi Apikey) {
 		movieObj = new TmdbMovies(Apikey);
 	}
