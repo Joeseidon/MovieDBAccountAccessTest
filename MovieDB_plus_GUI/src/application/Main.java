@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 
 import javafx.scene.web.WebView;
@@ -32,7 +31,8 @@ import java.util.*;
 public class Main extends Application {
 	private Hashtable<String, MovieDb> list = new Hashtable<String, MovieDb>();
 	private TmdbRandomizer randomizer;
-
+	private MovieSelection userSelection;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		MovieDBAccount user = new MovieDBAccount();
@@ -48,7 +48,10 @@ public class Main extends Application {
 		
 		//Create Movie Randomizer
 		randomizer = new TmdbRandomizer(user);
-
+		
+		//movie selection
+		userSelection = new MovieSelection(user);
+		
 		Button btn1 = new Button("Random Movie");
 		Button trailer = new Button("Trailer");
 
@@ -74,8 +77,8 @@ public class Main extends Application {
 				try {
 					randomizer.generatePool();
 					MovieDb x = randomizer.getRandomMovie();
-					user.setSelectedMovie(x);
-					Image img = new Image(user.getImageURL());
+					userSelection.setSelectedMovie(x);
+					Image img = new Image(userSelection.getImageURL());
 					ImageView imgView = new ImageView(img);
 					root.add(imgView, 1, 1);
 				} catch (RandomNotFoundException re) {
@@ -86,19 +89,18 @@ public class Main extends Application {
 		
 		listView.getSelectionModel().selectedItemProperty()
 		.addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
-			user.setSelectedMovie(list.get(new_val));
+			userSelection.setSelectedMovie(list.get(new_val));
 
-			Image img = new Image(user.getImageURL());
+			Image img = new Image(userSelection.getImageURL());
 			ImageView imgView = new ImageView(img);
 			root.add(imgView, 1, 1);
-			webview.getEngine().load(null);
 		});
 		
 		
 		trailer.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				generateTrailerWindow(user, webview);
+				userSelection.generateTrailerWindow(webview);
 			}
 		});
 
@@ -110,7 +112,7 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 	
-	public void generateTrailerWindow(MovieDBAccount user, WebView webview){
+	/*public void generateTrailerWindow(MovieDBAccount user, WebView webview){
 		
 		webview.getEngine().load(user.getVidoeURL());
 		
@@ -124,7 +126,7 @@ public class Main extends Application {
         stage.setScene(Trailer);
         stage.centerOnScreen();
         stage.show();
-	}
+	}*/
 
 	public static void main(String[] args) {
 		launch(args);

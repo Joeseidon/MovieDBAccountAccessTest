@@ -9,7 +9,7 @@ import java.io.IOException;
 import info.movito.themoviedbapi.TmdbAccount;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbAuthentication;
-import info.movito.themoviedbapi.TmdbMovies;
+
 import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.config.Account;
@@ -25,12 +25,13 @@ public class MovieDBAccount {
 	private TmdbAccount tmdbAccount;
 	private Account act;
 	private AccountID actId;
-	private String youTubeBaseURL = "https://www.youtube.com/watch?v=";
+	/*
 	private String baseImageURL = "https://image.tmdb.org/t/p/w500";
 	
 	private MovieDb selectedMovie;
 	
 	private TmdbMovies movieObj;
+	*/
 	
 	public MovieDBAccount() {
 		tmdbApi = new TmdbApi("3c55a927fbd8c6990313cb6d5de43d62");
@@ -38,7 +39,7 @@ public class MovieDBAccount {
 		tmdbAccount = tmdbApi.getAccount();
 		act = tmdbAccount.getAccount(sessionToken);
 		actId = new AccountID(act.getId());
-		createMoviesObj(tmdbApi);
+		//createMoviesObj(tmdbApi);
 	}
 
 	/*
@@ -126,7 +127,7 @@ public class MovieDBAccount {
 	public TmdbApi getTmdbApi(){
 		return tmdbApi;
 	}
-	
+	/*
 	public MovieDb getSelectedMovie(){
 		return selectedMovie;
 	}
@@ -145,6 +146,6 @@ public class MovieDBAccount {
 	
 	private void createMoviesObj(TmdbApi Apikey){
 		movieObj = new TmdbMovies(Apikey);
-	}
+	}*/
 	
 }
